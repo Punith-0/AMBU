@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const calls={lookups:[],city:[],missions:[],telemetry:[],clears:[],contexts:[]};
+const elements=new Map();let drawer=false;
+function node(id){return {id,textContent:'',innerHTML:'',classList:{toggle(){}},setAttribute(){},append(){},replaceChildren(){calls.clears.push(id)},getContext(){calls.contexts.push(id);return {clearRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){}}},width:700,height:110};}
+const document={hidden:false,body:{dataset:{},classList:{contains(){return drawer}}},getElementById(id){calls.lookups.push(id);if(!elements.has(id))elements.set(id,node(id));return elements.get(id)},createElement(){return node('created')}};
+const telemetrySource=fs.readFileSync(new URL('../dashboard/telemetry.js',import.meta.url),'utf8').replaceAll('export ','');
+const teleCtx=vm.createContext({document});vm.runInContext(telemetrySource,teleCtx);
+const world={metrics:{time:1,vehicles:10,speed:20,corridors:0,congestion:'Low',queue:1},ambulances:[],vehicles:[],signals:[],events:[],history:[],enabled:true};
+const network={junctions:[],roads:[]};
+teleCtx.world=world;teleCtx.network=network;vm.runInContext('telemetry(world,network,null,{mission:false,signals:false})',teleCtx);
+assert.deepEqual(calls.lookups,[],'hidden telemetry must not read or mutate the DOM');
+const appSource=fs.readFileSync(new URL('../dashboard/app.js',import.meta.url),'utf8').replace(/^import .*$/gm,'').replace('prepareNightwatch();','').replace(/start\(\)\.catch[\s\S]*$/,'');
+const ctx=vm.createContext({document,requestAnimationFrame:fn=>fn(),updateNightwatch:(...a)=>calls.missions.push(a),telemetry:(...a)=>calls.telemetry.push(a),cityStub:{network,update(...a){calls.city.push(a)}},payload:{worlds:[world],running:true,speed:1}});
+vm.runInContext(appSource+'\ncity=cityStub;render(payload);',ctx);
+assert.equal(calls.city.length,1);assert.equal(calls.missions.length,1);assert.equal(calls.telemetry[0][3].signals,false);assert.equal(calls.telemetry[0][3].mission,false);
+assert.deepEqual(calls.clears,[]);assert.deepEqual(calls.contexts,[],'hidden chart is not rendered');
+vm.runInContext("currentTab='science';render(payload)",ctx);
+assert.equal(calls.telemetry.at(-1)[3].signals,true);assert.deepEqual(calls.contexts,['chart']);assert.deepEqual(calls.clears,['logs']);
+vm.runInContext('render(payload)',ctx);assert.deepEqual(calls.clears,['logs'],'unchanged event log is retained');
+drawer=true;vm.runInContext("currentTab='live';missionInView=true;payload.running=false;payload.speed=4;render(payload)",ctx);
+assert.equal(calls.telemetry.at(-1)[3].mission,true);assert.equal(calls.telemetry.at(-1)[3].signals,false);assert.equal(calls.city.at(-1)[1],4);assert.equal(calls.city.at(-1)[2],false);assert.equal(calls.missions.at(-1)[1],false);assert.deepEqual(calls.clears,['logs','fleet']);
+console.log('PASS hidden DOM/chart skipping; tab/drawer refresh; unchanged log retention; pause/rate propagation and essential mission updates.');

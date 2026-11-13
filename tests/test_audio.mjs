@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {audioStage} from '../dashboard/audio.js';
+const world=(stage,active=true,arrival=null)=>({ambulances:[{stage,active,arrival}]});
+assert.equal(audioStage(world('responding')),'responding');
+assert.equal(audioStage(world('transport')),'transport');
+assert.equal(audioStage(world('transport'),false),'idle');
+assert.equal(audioStage(world('complete',true,300)),'idle');
+assert.equal(audioStage(world('responding',false)),'idle');
+assert.equal(audioStage(world('loading')),'loading');
+assert.equal(audioStage({ambulances:[...world('responding').ambulances,...world('transport').ambulances]}),'transport');
+console.log('PASS sound transitions: pickup, transport, loading, completed, paused, inactive and mixed fleet');

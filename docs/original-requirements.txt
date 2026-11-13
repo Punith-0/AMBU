@@ -1,0 +1,344 @@
+# PROJECT AMBU – COMPLETE ENGINEERING AND DEVELOPMENT MASTER PROMPT
+
+## ROLE
+
+Act as a Senior AI Engineer, Intelligent Transportation Systems Researcher, Python Architect, SUMO Simulation Specialist, Unity 3D Developer, and Software Testing Engineer.
+
+Your responsibility is to design, implement, integrate, test, and deliver a complete working implementation of the following project.
+
+Do not merely provide suggestions, explanations, pseudo-code, or isolated code snippets. Build the actual project.
+
+# 1. PROJECT IDENTITY
+
+Project Name: AMBU
+
+Full Title: AI-Driven Emergency Vehicle Traffic Clearance and Predictive Signal Coordination.
+
+Project Category:
+- Artificial Intelligence
+- Intelligent Transportation Systems
+- Smart City Simulation
+- Machine Learning
+- Digital Twin
+- Emergency Response Optimization
+
+# 2. CORE OBJECTIVE
+
+Develop an intelligent traffic management simulation capable of detecting emergency vehicles, analysing real-time traffic conditions, predicting congestion, selecting efficient ambulance routes, and dynamically coordinating traffic signals to establish a green corridor.
+
+The system must demonstrate measurable improvements over conventional traffic signal operation.
+
+This is a software-based simulation. No physical sensors, cameras, GPS devices, or hardware are required.
+
+# 3. REQUIRED ARCHITECTURE
+
+Implement a modular architecture consisting of:
+
+A. SUMO TRAFFIC SIMULATION
+- Load existing SUMO road networks.
+- Support custom network configurations.
+- Simulate vehicles, traffic density, intersections, and traffic lights.
+- Generate configurable traffic scenarios.
+- Support normal and emergency traffic conditions.
+- Allow ambulance insertion at configurable locations.
+
+B. PYTHON INTELLIGENCE ENGINE
+Use Python as the central control system.
+
+Responsibilities:
+- Start, stop and control SUMO through TraCI.
+- Identify emergency vehicles.
+- Extract vehicle positions, speeds, routes and directions.
+- Monitor traffic density and queue lengths.
+- Identify congested intersections.
+- Calculate ambulance travel-time estimates.
+- Coordinate signal priority.
+- Maintain simulation logs.
+
+C. AI AND MACHINE LEARNING ENGINE
+
+Implement actual working machine learning modules:
+
+1. Traffic State Classification
+- Use K-Means clustering or another justified clustering algorithm.
+- Identify low, medium and high congestion states.
+- Extract relevant traffic features.
+
+2. Travel Time Prediction
+- Implement a regression-based prediction model.
+- Use traffic density, vehicle count, average speed, queue length and route distance.
+- Compare predicted travel time against actual travel time.
+
+3. Dynamic Route Selection
+- Evaluate alternative ambulance routes.
+- Include congestion and expected signal delays.
+- Select the route with the lowest estimated travel cost.
+
+4. Adaptive Signal Coordination
+- Detect approaching emergency vehicles.
+- Estimate arrival time at upcoming intersections.
+- Prioritize the ambulance route.
+- Create and maintain a green corridor.
+- Restore normal traffic signal operation after passage.
+- Prevent conflicting or unsafe signal phases.
+
+Do not falsely label simple conditional rules as machine learning.
+
+# 4. EMERGENCY VEHICLE MANAGEMENT
+
+Implement:
+- Ambulance registration and identification.
+- Emergency activation and deactivation.
+- Urgency levels.
+- Configurable ambulance starting points and destinations.
+- Dynamic route updates.
+- Automatic signal priority.
+- Emergency journey tracking.
+- Response time calculation.
+
+The system must support multiple ambulances and handle conflicting emergency requests safely.
+
+# 5. UNITY 3D DIGITAL TWIN
+
+Use Unity 6.6 with URP.
+
+Create an actual 3D visualization of the traffic simulation.
+
+Required visual elements:
+- Roads and intersections.
+- Road markings and lanes.
+- Buildings.
+- Sidewalks.
+- Streetlights.
+- Vegetation.
+- Hospitals.
+- Police stations.
+- Fire stations.
+- Parks.
+- Traffic signals.
+- Normal vehicles.
+- Emergency vehicles.
+
+Use procedural generation and automated asset placement wherever practical.
+
+Do not require Blender.
+
+Do not manually create hundreds of individual objects.
+
+Support loading the existing SUMO network into the Unity environment.
+
+Use the existing SUMO coordinates and network geometry rather than generating an unrelated fictional city.
+
+# 6. PYTHON–UNITY COMMUNICATION
+
+Establish a reliable TCP socket connection.
+
+Python should send JSON snapshots containing:
+- Simulation timestamp.
+- Vehicle IDs.
+- Vehicle types.
+- X and Y coordinates.
+- Vehicle heading.
+- Speed.
+- Ambulance status.
+- Traffic signal IDs.
+- Traffic signal states.
+- Emergency route information.
+
+Unity must:
+- Receive JSON data.
+- Parse incoming snapshots.
+- Update vehicle GameObjects.
+- Pool and reuse vehicle objects.
+- Update traffic signal materials.
+- Highlight emergency routes.
+- Display simulation information.
+
+Implement connection recovery, error handling and efficient data transmission.
+
+Avoid sending unnecessary data every frame.
+
+# 7. DASHBOARD AND ANALYTICS
+
+Build an operational monitoring interface displaying:
+
+- Total vehicles.
+- Active ambulances.
+- Average traffic speed.
+- Congestion levels.
+- Active green corridors.
+- Average ambulance travel time.
+- Predicted travel time.
+- Traffic signal status.
+- Intersection clearance status.
+
+Provide:
+- Real-time monitoring.
+- Simulation controls.
+- Emergency activation.
+- Scenario selection.
+- Historical performance charts.
+- CSV export.
+- Simulation logs.
+
+# 8. EXPERIMENTAL VALIDATION
+
+Implement a proper comparison between:
+
+Scenario A: Conventional traffic signal operation.
+
+Scenario B: AMBU intelligent emergency prioritization.
+
+Measure:
+- Ambulance travel time.
+- Emergency response delay.
+- Average vehicle waiting time.
+- Average intersection queue length.
+- Traffic throughput.
+- Signal waiting time.
+- Congestion levels.
+
+Run multiple experiments using different random seeds.
+
+Generate comparison charts and CSV reports.
+
+Never fabricate experimental results. All metrics must originate from actual simulation runs.
+
+# 9. EXISTING PROJECT COMPATIBILITY
+
+Before writing code:
+
+1. Inspect the existing project directory.
+2. Identify existing Python scripts.
+3. Identify SUMO configuration and network files.
+4. Identify Unity project structure.
+5. Identify existing scripts and assets.
+6. Identify existing completed modules.
+7. Identify missing modules and integration problems.
+
+Preserve existing working implementations.
+
+Do not overwrite large SUMO network files.
+
+Do not unnecessarily regenerate existing city data.
+
+Do not replace existing project architecture without a technical reason.
+
+Treat existing project files as the source of truth.
+
+# 10. ENGINEERING REQUIREMENTS
+
+- Use Python for the intelligence engine.
+- Use SUMO and TraCI for traffic simulation.
+- Use Unity 6.6 URP for visualization.
+- Avoid Node.js.
+- Avoid unnecessary dependencies.
+- Use modular, maintainable code.
+- Include configuration files.
+- Include proper exception handling.
+- Include logging.
+- Include documentation.
+- Include installation scripts where appropriate.
+- Never use fake API responses or hardcoded demonstration metrics as real results.
+- Never leave critical functions as TODO placeholders.
+
+# 11. TESTING REQUIREMENTS
+
+Test each module independently.
+
+Verify:
+- SUMO starts correctly.
+- TraCI connects correctly.
+- Vehicles are detected.
+- Ambulance activation works.
+- Route selection works.
+- Traffic signals change correctly.
+- Green corridor is established.
+- Normal signal operation is restored.
+- Python–Unity communication works.
+- Unity positions match SUMO positions.
+- Analytics are generated correctly.
+- Multiple emergency vehicles are handled.
+
+Fix errors rather than simply documenting them.
+
+# 12. FINAL DELIVERABLE
+
+Deliver the complete project in a single ZIP archive.
+
+Required structure:
+
+AMBU/
+    README.md
+    requirements.txt
+    config/
+    python_engine/
+        simulation/
+        ai/
+        routing/
+        emergency/
+        traffic_control/
+        communication/
+        analytics/
+    sumo/
+        scenarios/
+        configurations/
+    unity/
+        Unity project and integration scripts
+    dashboard/
+    datasets/
+    experiments/
+    results/
+    reports/
+    tests/
+    scripts/
+    docs/
+
+Do not duplicate large existing network files unnecessarily. Provide configuration and instructions for referencing externally stored files when needed.
+
+Include:
+- Complete source code.
+- Installation instructions.
+- Execution instructions.
+- Architecture documentation.
+- System requirements.
+- Testing documentation.
+- Experimental methodology.
+- Sample generated results from actual runs.
+- Troubleshooting guide.
+
+# 13. EXECUTION RULES
+
+Work in phases.
+
+Phase 1: Inspect existing files and identify architecture.
+
+Phase 2: Establish SUMO and Python integration.
+
+Phase 3: Implement AI and traffic intelligence.
+
+Phase 4: Implement emergency vehicle management.
+
+Phase 5: Implement traffic signal coordination.
+
+Phase 6: Implement Python–Unity communication.
+
+Phase 7: Complete Unity integration.
+
+Phase 8: Implement analytics and experimental validation.
+
+Phase 9: Run tests, fix errors and verify the complete system.
+
+Phase 10: Package the complete project into one ZIP.
+
+At the end of every phase, verify that the implementation actually works before continuing.
+
+If something cannot be completed due to missing assets, files, dependencies, or environmental restrictions, explicitly identify the limitation. Never pretend that it works.
+
+## FINAL INSTRUCTION
+
+I want a functioning, integrated, reproducible engineering project, not a conceptual prototype.
+
+Prioritize correctness, reliability, modularity, performance and actual working functionality over unnecessary complexity or decorative features.
+
+Inspect first. Build second. Integrate third. Test everything. Deliver the ZIP last.
