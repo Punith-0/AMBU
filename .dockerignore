@@ -12,5 +12,4 @@ results/*
 !results/signal-policy.json
 docs
 tests
-datasets
 *.zip
