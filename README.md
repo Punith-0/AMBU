@@ -60,3 +60,40 @@ Identical simulation snapshots are no longer repeatedly sent over the WebSocket.
 Validation: 11 backend tests pass (results/test-report-square.txt); motion, audio, batching/raycast and hidden-UI update checks pass. Live grid geometry/models/RL, unique WebSocket timestamps, dispatch, synchronized cameras and free-camera selection verified. Browser console showed no errors. Actual frame rate varies by device and viewport.
 
 Frontend checks: `node tests/test_motion.mjs`, `node tests/test_audio.mjs`, `node tests/test_ui_render.mjs`, `node --no-warnings --loader ./tests/three-loader.mjs tests/test_batching.mjs`.
+
+## Running on macOS with Docker
+
+Start Docker Desktop and wait until its engine is running.
+
+If the `ambu` image has already been built, start AMBU with:
+
+```bash
+docker run -d --rm --name ambu-local \
+  -p 10000:10000 \
+  ambu
+```
+
+Open http://localhost:10000.
+
+This command runs the simulation without optional Groq credentials.
+To enable AI Insights, pass your private configuration with Docker's
+`--env-file` option. Never commit that configuration file.
+
+### Stop AMBU
+
+```bash
+docker stop ambu-local
+```
+
+Because `--rm` was used, stopping removes the container.
+Run the startup command again to create a fresh simulation.
+
+### Troubleshooting
+
+- **Docker socket connection error:** Open Docker Desktop and wait
+  until the engine is running.
+- **Container name already in use:** Check
+  `docker ps -a --filter name=ambu-local`. If it is running, open the
+  website. If it is stopped, use `docker start ambu-local`.
+- **Windows launcher fails:** `Start-AMBU.bat` is for Windows.
+  Use Docker on macOS.
