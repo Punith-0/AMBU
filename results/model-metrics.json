@@ -1,43 +1,54 @@
 {
   "linear": {
-    "mae_seconds": 11.689641904346129,
-    "rmse_seconds": 14.398142007908154,
-    "r2": 0.946405998613904,
-    "within_10_seconds": 0.4953271028037383,
-    "within_20_percent": 0.6199376947040498
+    "mae_seconds": 13.45212139279251,
+    "rmse_seconds": 17.44275776095329,
+    "r2": 0.9237044575504455,
+    "within_10_seconds": 0.44112478031634444,
+    "within_20_percent": 0.5975395430579965
   },
   "forest": {
-    "mae_seconds": 9.855056466055196,
-    "rmse_seconds": 12.676796889683349,
-    "r2": 0.9584546576699198,
-    "within_10_seconds": 0.5825545171339563,
-    "within_20_percent": 0.6635514018691588
+    "mae_seconds": 12.375224313702423,
+    "rmse_seconds": 16.50432681377378,
+    "r2": 0.9316931126206232,
+    "within_10_seconds": 0.5114235500878734,
+    "within_20_percent": 0.6449912126537786
   },
-  "training_samples": 1292,
-  "test_samples": 321,
-  "training_episodes": 112,
-  "test_episodes": 28,
-  "logistic_accuracy": 1.0,
-  "priority_positive_labels": 100,
-  "priority_total_labels": 140,
+  "training_samples": 2277,
+  "test_samples": 569,
+  "training_episodes": 176,
+  "test_episodes": 44,
+  "logistic_accuracy": 0.9545454545454546,
+  "priority_positive_labels": 174,
+  "priority_total_labels": 220,
   "split": "Whole random seeds: multiples of 5 held out",
   "priority_label": "1 if ambulance seconds saved > 0.02 * additional total non-emergency waiting vehicle-seconds + 3 seconds. Paired runs; journey-level admission, not a physical signal command.",
-  "logistic_balanced_accuracy": 1.0,
-  "logistic_f1": 1.0,
-  "majority_baseline": 0.7142857142857143,
+  "logistic_confusion": {
+    "true_negative": 8,
+    "false_positive": 1,
+    "false_negative": 1,
+    "true_positive": 34
+  },
+  "novel_route_priority_test": {
+    "episodes": 16,
+    "accuracy": 0.875,
+    "positive_labels": 15
+  },
+  "logistic_balanced_accuracy": 0.9301587301587302,
+  "logistic_f1": 0.9714285714285714,
+  "majority_baseline": 0.7954545454545454,
   "tuning": {
     "forest": {
       "max_depth": 6,
-      "min_samples_leaf": 1
+      "min_samples_leaf": 6
     },
     "logistic": {
-      "logisticregression__C": 10,
+      "logisticregression__C": 1,
       "logisticregression__class_weight": null
     },
     "method": "Five-fold grouped CV on training seeds only"
   },
   "distance_speed_baseline": {
-    "mae_seconds": 45.10116413465788
+    "mae_seconds": 42.787124053417955
   },
   "linear_features": "derived travel time and traffic interactions"
 }

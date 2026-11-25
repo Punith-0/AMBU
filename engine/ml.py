@@ -54,7 +54,7 @@ class Models:
         dtrain = [r for r in decisions if r['seed']%5 != 0]
         dtest = [r for r in decisions if r['seed']%5 == 0]
         if len(set(r['y'] for r in dtrain)) != 2: raise ValueError('Priority training needs both measured outcome classes; collect more varied episodes.')
-        logistic_search=GridSearchCV(make_pipeline(StandardScaler(),LogisticRegression(max_iter=3000,random_state=42)),{'logisticregression__C':[.01,.1,1,10,100],'logisticregression__class_weight':[None,'balanced']},cv=cv,scoring='balanced_accuracy',n_jobs=2)
+        logistic_search=GridSearchCV(make_pipeline(StandardScaler(),LogisticRegression(max_iter=3000,random_state=42)),{'logisticregression__C':[.001,.01,.1,1,10],'logisticregression__class_weight':[None,'balanced']},cv=cv,scoring='balanced_accuracy',n_jobs=2)
         logistic_search.fit([r['x'] for r in dtrain],[r['y'] for r in dtrain],groups=[r['seed'] for r in dtrain])
         self.logistic=logistic_search.best_estimator_
 
@@ -66,6 +66,9 @@ class Models:
         metrics = {name: {'mae_seconds': mean_absolute_error(yt,model.predict(xt)), 'rmse_seconds': float(np.sqrt(mean_squared_error(yt,model.predict(xt))))} for name,model in [('linear',self.linear),('forest',self.forest)]}
         metrics.update(training_samples=len(train), test_samples=len(test), training_episodes=len(dtrain), test_episodes=len(dtest), logistic_accuracy=accuracy_score([r['y'] for r in dtest], self.logistic.predict([r['x'] for r in dtest])), priority_positive_labels=sum(r['y'] for r in decisions), priority_total_labels=len(decisions), split='Whole random seeds: multiples of 5 held out', priority_label='1 if ambulance seconds saved > 0.02 * additional total non-emergency waiting vehicle-seconds + 3 seconds. Paired runs; journey-level admission, not a physical signal command.')
         target=[r['y'] for r in dtest];pred=self.logistic.predict([r['x'] for r in dtest])
+        metrics['logistic_confusion']={'true_negative':int(sum(t==0 and p==0 for t,p in zip(target,pred))),'false_positive':int(sum(t==0 and p==1 for t,p in zip(target,pred))),'false_negative':int(sum(t==1 and p==0 for t,p in zip(target,pred))),'true_positive':int(sum(t==1 and p==1 for t,p in zip(target,pred)))}
+        novel=[r for r in dtest if r['seed']>140]
+        metrics['novel_route_priority_test']={'episodes':len(novel),'accuracy':float(accuracy_score([r['y'] for r in novel],self.logistic.predict([r['x'] for r in novel]))) if novel else None,'positive_labels':sum(r['y'] for r in novel)}
         metrics.update(logistic_balanced_accuracy=balanced_accuracy_score(target,pred),logistic_f1=f1_score(target,pred,zero_division=0),majority_baseline=max(target.count(0),target.count(1))/len(target),tuning={'forest':forest_search.best_params_,'logistic':logistic_search.best_params_,'method':'Five-fold grouped CV on training seeds only'})
         for name,model in [('linear',self.linear),('forest',self.forest)]:metrics[name]['r2']=r2_score(yt,model.predict(xt))
         baseline=np.asarray(xt)[:,0]/np.maximum(np.asarray(xt)[:,2],2)

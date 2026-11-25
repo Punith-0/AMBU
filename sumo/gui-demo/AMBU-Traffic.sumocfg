@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<configuration><input><net-file value="../nightwatch.net.xml" /><route-files value="demand.rou.xml" /></input><time><begin value="0" /><end value="1200" /><step-length value="0.5" /></time></configuration>

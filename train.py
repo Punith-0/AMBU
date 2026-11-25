@@ -1,5 +1,5 @@
 """Run paired episodes, collect actual outcomes, train and evaluate models."""
-import json, csv, argparse
+import json, csv, argparse, random
 from engine.network import prepare, ROOT
 from engine.simulation import Simulation
 from engine.ml import Models
@@ -9,6 +9,8 @@ def run(seeds, append=False):
     samples, decisions, traffic, rows = [], [], [], []
     if append:
         previous=json.loads((ROOT/'results/training-data.json').read_text())
+        existing={r['seed'] for r in previous['decisions']}
+        seeds=[seed for seed in seeds if seed not in existing]
         samples,decisions,traffic=previous['samples'],previous['decisions'],previous['traffic']
         with (ROOT/'results/paired-training-runs.csv').open() as f: rows=list(csv.DictReader(f))
     trips = [('A0A1','E3E4'),('A0B0','D4E4'),('E0E1','A3A4'),('A2B2','D2E2'),('B1B2','B1B2'),('C2D2','D2E2'),('C1C2','C1C2')]
@@ -19,7 +21,21 @@ def run(seeds, append=False):
             sim = Simulation(net,seed,density,enabled)
             try:
                 sim.step(120)
-                start,end = trips[seed%len(trips)]
+                if seed<=140:
+                    start,end=trips[seed%len(trips)]
+                else:
+                    rng=random.Random(seed)
+                    edges=[e for e in net.getEdges() if e.getFunction()!='internal']
+                    start_edge=rng.choice(edges)
+                    candidates=[]
+                    for target in edges:
+                        if target==start_edge:continue
+                        path,cost=net.getShortestPath(start_edge,target)
+                        if path:candidates.append((target.getID(),cost))
+                    candidates.sort(key=lambda item:item[1])
+                    segment=len(candidates)//3
+                    band=candidates[:segment] if seed%3==0 else candidates[segment:2*segment] if seed%3==1 else candidates[2*segment:]
+                    start,end=start_edge.getID(),rng.choice(band or candidates)[0]
                 vid = sim.dispatch(start,end)
                 while sim.time < 480:
                     snap = sim.step(10)

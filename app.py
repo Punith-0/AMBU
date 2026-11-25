@@ -1,4 +1,4 @@
-import asyncio, json, csv, io, threading, logging, time
+import asyncio, json, csv, io, threading, logging, time, subprocess, sys
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Request
 from fastapi.responses import FileResponse, Response
@@ -89,6 +89,50 @@ def insights():
     with lock:
         snapshot={'worlds':[{'enabled':w.last['enabled'],'seed':w.last['seed'],'metrics':dict(w.last['metrics']),'ambulances':[dict(a) for a in w.last['ambulances']]} for w in worlds]}
     return generate(snapshot)
+
+training_status={'state':'idle','completed':0,'total':0,'message':'Ready'}
+training_guard=threading.Lock()
+
+def training_worker(start,count):
+    global models
+    try:
+        command=[sys.executable,'-X','utf8',str(ROOT/'train.py'),'--start',str(start),'--seeds',str(start+count-1),'--append']
+        with (ROOT/'results/training-job.log').open('w',encoding='utf-8') as log, subprocess.Popen(command,cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,encoding='utf-8',errors='replace',bufsize=1) as process:
+            for line in process.stdout:
+                log.write(line);log.flush()
+                if line.startswith('Seed '):
+                    with training_guard:
+                        training_status['completed']+=1
+                        training_status['message']=line.strip()[:200]
+            if process.wait():raise RuntimeError('Training process failed; inspect results/training-job.log')
+        subprocess.run([sys.executable,'-X','utf8',str(ROOT/'export_training.py')],cwd=ROOT,check=True,capture_output=True,text=True)
+        refreshed=Models()
+        if not refreshed.ready:raise RuntimeError('New model artifact was not loadable')
+        with lock:
+            models=refreshed
+            for world in worlds:world.models=refreshed
+        with training_guard:training_status.update(state='complete',message='Models updated and CSV datasets exported')
+    except Exception as exc:
+        logging.exception('Training failed')
+        with training_guard:training_status.update(state='failed',message=str(exc)[:200])
+
+@app.get('/api/training/status')
+def get_training_status():
+    with training_guard:return dict(training_status)
+
+class TrainingRequest(BaseModel):
+    episodes:int=Field(40,ge=10,le=100)
+
+@app.post('/api/training/start')
+def start_training(req:TrainingRequest):
+    with training_guard:
+        if training_status['state']=='running':raise HTTPException(409,'Training already running')
+        data=ROOT/'results/training-data.json'
+        existing=json.loads(data.read_text())['decisions'] if data.exists() else []
+        start=max((r['seed'] for r in existing),default=0)+1
+        training_status.update(state='running',completed=0,total=req.episodes,message=f'Starting at seed {start}')
+    threading.Thread(target=training_worker,args=(start,req.episodes),daemon=True).start()
+    return get_training_status()
 
 @app.get('/api/models')
 def model_info():
