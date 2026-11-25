@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "mean_seconds": 204.9,
+    "std_seconds": 10.59126998994927,
+    "n": 5
+  },
+  "AMBU": {
+    "mean_seconds": 133.6,
+    "std_seconds": 24.07384472825228,
+    "n": 5
+  }
+}

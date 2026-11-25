@@ -36,7 +36,7 @@ All numeric observations originate from SUMO runs in the included city network. 
 - final_policy_evaluation.csv: independent seeds 101-105, fixed 400-second horizons, fitted Logistic Regression gated standard AMBU versus baseline. This is a separate evaluation, not an RL comparison.
 - paired_experiments.csv: raw baseline/priority outcomes, including total normal waiting vehicle-seconds, mean summed detector queue, throughput and collisions. These training-policy results are NOT the evaluation of the final Logistic Regression gated policy.
 
-Seeds 1-42 use seven route families on the square 36-junction road network (sumo/nightwatch.net.xml), with identical 480-second paired horizons. Short trips with no priority benefit provide negative labels. This small synthetic training set supports the demonstrator, not citywide generalization.
+Seeds 1-140 use seven route families; later seeds add varied road pairs, with short, medium and long journeys from seed 181 onward. All paired episodes use identical 480-second horizons for AMBU ON and OFF. Short trips with little priority benefit can provide negative labels. This synthetic network supports the demonstrator, not citywide generalization.
 '''
     (dest/'DATA_DICTIONARY.md').write_text(readme,encoding='utf-8')
     counts={'eta_samples':len(eta),'priority_episodes':len(priority),'congestion_samples':len(traffic),'paired_runs':len(runs)}

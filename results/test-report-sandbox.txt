@@ -1,0 +1,12 @@
+.......Matched mission: AMBU 88.5s, baseline 133.5s; both completed without collisions.
+........
+============================== warnings summary ===============================
+tests/test_matched_missions.py::test_matched_station_missions_are_independent_and_complete
+tests/test_matched_missions.py::test_matched_station_missions_are_independent_and_complete
+tests/test_missions_rl.py::test_station_pickup_timeout_transport
+tests/test_missions_rl.py::test_explicit_hospital_choice_and_route_plan
+  C:\Users\punit\Documents\Codex\2026-11-03\bro\outputs\AMBU\engine\simulation.py:113: UserWarning: API change now handles duration as floating point seconds
+    self.c.vehicle.setStop(vid,pickup,pos=lane.getLength()-10,laneIndex=0,duration=100000)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+15 passed, 4 warnings in 34.39s

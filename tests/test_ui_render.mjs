@@ -5,7 +5,7 @@ const calls={lookups:[],city:[],missions:[],telemetry:[],clears:[],contexts:[]};
 const elements=new Map();let drawer=false;
 function node(id){return {id,textContent:'',innerHTML:'',classList:{toggle(){}},setAttribute(){},append(){},replaceChildren(){calls.clears.push(id)},getContext(){calls.contexts.push(id);return {clearRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){}}},width:700,height:110};}
 const document={hidden:false,body:{dataset:{},classList:{contains(){return drawer}}},getElementById(id){calls.lookups.push(id);if(!elements.has(id))elements.set(id,node(id));return elements.get(id)},createElement(){return node('created')}};
-const telemetrySource=fs.readFileSync(new URL('../dashboard/telemetry.js',import.meta.url),'utf8').replaceAll('export ','');
+const telemetrySource=fs.readFileSync(new URL('../dashboard/telemetry.js',import.meta.url),'utf8').replace(/^import .*$/gm,'').replaceAll('export ','');
 const teleCtx=vm.createContext({document});vm.runInContext(telemetrySource,teleCtx);
 const world={metrics:{time:1,vehicles:10,speed:20,corridors:0,congestion:'Low',queue:1},ambulances:[],vehicles:[],signals:[],events:[],history:[],enabled:true};
 const network={junctions:[],roads:[]};

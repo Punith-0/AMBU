@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository."
+title: "AMBU: Ambulance Signal Priority Simulation"
+type: software
+authors:
+  - family-names: Dewangan
+    given-names: Punith
+repository-code: "https://github.com/Punith-0/AMBU"

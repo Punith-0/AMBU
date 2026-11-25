@@ -1,0 +1,80 @@
+[
+  {
+    "seed": 201,
+    "enabled": true,
+    "learning": true,
+    "updates": 742,
+    "states": 127,
+    "epsilon": 0.14587892049598833,
+    "mean_reward": -1.550594275446028,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  },
+  {
+    "seed": 202,
+    "enabled": true,
+    "learning": true,
+    "updates": 1496,
+    "states": 213,
+    "epsilon": 0.11441647597254005,
+    "mean_reward": -1.8929462694168566,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  },
+  {
+    "seed": 203,
+    "enabled": true,
+    "learning": true,
+    "updates": 2246,
+    "states": 323,
+    "epsilon": 0.09420631182289213,
+    "mean_reward": -2.3257473603867163,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  },
+  {
+    "seed": 204,
+    "enabled": true,
+    "learning": true,
+    "updates": 2994,
+    "states": 331,
+    "epsilon": 0.08009611533840609,
+    "mean_reward": -1.9443044819798336,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  },
+  {
+    "seed": 205,
+    "enabled": true,
+    "learning": true,
+    "updates": 3761,
+    "states": 350,
+    "epsilon": 0.06943239021003299,
+    "mean_reward": -1.8250070270064973,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  },
+  {
+    "seed": 206,
+    "enabled": true,
+    "learning": true,
+    "updates": 4510,
+    "states": 396,
+    "epsilon": 0.061443932411674354,
+    "mean_reward": -1.8745030091859378,
+    "algorithm": "Tabular Q-learning",
+    "persisted": true,
+    "collisions": 0,
+    "time": 600.0
+  }
+]
